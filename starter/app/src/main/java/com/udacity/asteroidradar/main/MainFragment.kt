@@ -20,6 +20,9 @@ class MainFragment : Fragment() {
 
         binding.viewModel = viewModel
 
+        val adapter = MainAdapter()
+        binding.asteroidRecycler.adapter = adapter
+
         setHasOptionsMenu(true)
 
         return binding.root
