@@ -1,27 +1,26 @@
 package com.udacity.asteroidradar.main
 
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.udacity.asteroidradar.Asteroid
-import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.databinding.AsteroidItemListBinding
-import kotlinx.android.synthetic.main.asteroid_item_list.view.*
+import com.udacity.asteroidradar.domain.Asteroid
 
-class MainAdapter : ListAdapter<Asteroid, MainAdapter.ViewHolder>(AsteroidDiffCallback()) {
+class MainAdapter(val onClickListener: OnClicKListener) : ListAdapter<Asteroid, MainAdapter.ViewHolder>(AsteroidDiffCallback()) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainAdapter.ViewHolder {
         return ViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: MainAdapter.ViewHolder, position: Int) {
-        holder.bind(position)
+        val asteroid = getItem(position)
+        holder.itemView.setOnClickListener{
+            onClickListener.onClick(asteroid)
+        }
+        holder.bind(asteroid)
     }
-
-    override fun getItemCount(): Int = 20
 
     class ViewHolder private constructor(val binding: AsteroidItemListBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -33,11 +32,9 @@ class MainAdapter : ListAdapter<Asteroid, MainAdapter.ViewHolder>(AsteroidDiffCa
             }
         }
 
-        fun bind(position: Int) {
-            Log.d("Fragment", "hola")
-            val name = itemView.asteroidName
-
-            name.text = "asteriode ${position}"
+        fun bind(asteroid: Asteroid) {
+            binding.item = asteroid
+            binding.executePendingBindings()
         }
     }
 
@@ -49,5 +46,9 @@ class MainAdapter : ListAdapter<Asteroid, MainAdapter.ViewHolder>(AsteroidDiffCa
         override fun areContentsTheSame(oldItem: Asteroid, newItem: Asteroid): Boolean {
             return oldItem == newItem
         }
+    }
+
+    class OnClicKListener(val clickListener: (asteroid: Asteroid) -> Unit) {
+        fun onClick(asteroid: Asteroid) = clickListener(asteroid)
     }
 }
