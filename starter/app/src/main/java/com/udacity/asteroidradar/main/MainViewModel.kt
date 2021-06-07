@@ -5,10 +5,12 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import androidx.lifecycle.*
+import com.udacity.asteroidradar.AsteroidApplication
 import com.udacity.asteroidradar.database.getDatabase
 import com.udacity.asteroidradar.domain.Asteroid
 import com.udacity.asteroidradar.repository.AsteroidRepository
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.lang.IllegalArgumentException
 import java.util.*
 
@@ -21,16 +23,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val navigateToSelectedAsteroid: LiveData<Asteroid> get() = _navigateToSelectedAsteroid
 
     init {
-        val connectivityManager =
-            application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
-        val isConnected: Boolean = activeNetwork?.isConnected == true
-
-        if (isConnected) {
+        if (AsteroidApplication.checkConnectivity(application.applicationContext)) {
             viewModelScope.launch {
                 asteroidRepository.refreshPictureOfTheDay()
                 asteroidRepository.refreshAsteroids()
             }
+        } else {
+            Timber.w("There's no internet connection, Retrieving Data from Cache...")
         }
     }
 
