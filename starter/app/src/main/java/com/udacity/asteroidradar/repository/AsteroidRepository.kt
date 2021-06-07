@@ -19,7 +19,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class AsteroidRepository(private val database: AsteroidDatabase) {
-    private val apiKey = "Your own api key here!"
+    private val apiKey = "rhsa3d06cHbmVC6ufqkSzb86KFEUJPuemi0dqX4d"
     private val dateFormat = SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT, Locale.getDefault())
     private val calendar = Calendar.getInstance()
     private val currentTime = calendar.time
@@ -41,7 +41,7 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
                 val pictureOfTheDay = Network.pictureOfTheDay.getPictureOfTheDay(apiKey).await()
                 database.asteroidDao.insertPictureOfTheDay(pictureOfTheDay.asDatabaseModel())
             } catch (e: HttpException) {
-                Timber.d("e.localizedMessage")
+                Timber.d(e.localizedMessage)
             }
         }
     }
