@@ -63,7 +63,7 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
 
     suspend fun truncateTables() {
         withContext(Dispatchers.IO) {
-            database.asteroidDao.truncateAsteroidsTable()
+            database.asteroidDao.deleteOldAsteroids(startDate)
             database.asteroidDao.truncatePictureOfTheDayTable()
         }
     }

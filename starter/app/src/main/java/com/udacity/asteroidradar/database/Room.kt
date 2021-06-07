@@ -19,8 +19,8 @@ interface AsteroidDao {
     @Query("select * from table_picture_of_the_day limit 1")
     fun getPictureOfTheDay(): LiveData<DatabasePicture>
 
-    @Query("delete from table_asteroid")
-    fun truncateAsteroidsTable()
+    @Query("delete from table_asteroid where closeApproachDate < :today")
+    fun deleteOldAsteroids(today: String)
 
     @Query("delete from table_picture_of_the_day")
     fun truncatePictureOfTheDayTable()
