@@ -19,7 +19,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class AsteroidRepository(private val database: AsteroidDatabase) {
-    private val apiKey = "rhsa3d06cHbmVC6ufqkSzb86KFEUJPuemi0dqX4d"
+    private val apiKey = "YOUR_API_HERE"
     private val dateFormat = SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT, Locale.getDefault())
     private val calendar = Calendar.getInstance()
     private val currentTime = calendar.time
