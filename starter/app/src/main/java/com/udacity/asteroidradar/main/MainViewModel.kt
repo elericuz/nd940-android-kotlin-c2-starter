@@ -1,6 +1,9 @@
 package com.udacity.asteroidradar.main
 
 import android.app.Application
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import androidx.lifecycle.*
 import com.udacity.asteroidradar.database.getDatabase
 import com.udacity.asteroidradar.domain.Asteroid
@@ -18,9 +21,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val navigateToSelectedAsteroid: LiveData<Asteroid> get() = _navigateToSelectedAsteroid
 
     init {
-        viewModelScope.launch {
-            asteroidRepository.refreshPictureOfTheDay()
-            asteroidRepository.refreshAsteroids()
+        val connectivityManager =
+            application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
+        val isConnected: Boolean = activeNetwork?.isConnected == true
+
+        if (isConnected) {
+            viewModelScope.launch {
+                asteroidRepository.refreshPictureOfTheDay()
+                asteroidRepository.refreshAsteroids()
+            }
         }
     }
 
